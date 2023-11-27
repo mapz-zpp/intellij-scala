@@ -1,12 +1,13 @@
 package org.jetbrains.plugins.scala.bsp.extension
 
 import org.jetbrains.plugins.bsp.extension.points.BspBuildTargetClassifierExtension
+import org.jetbrains.plugins.scala.bsp.config.ScalaPluginConstants
 
 import java.util
 import scala.jdk.CollectionConverters._
 
 private class ScalaBuildTargetClassifier extends BspBuildTargetClassifierExtension {
-  override val name: String = "sbtBsp"
+  override val name: String = ScalaPluginConstants.SYSTEM_ID.getId
 
   override val separator: String = "/"
 
