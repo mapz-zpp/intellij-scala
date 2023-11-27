@@ -5,7 +5,7 @@ import org.jetbrains.plugins.bsp.extension.points.BspBuildTargetClassifierExtens
 import java.util
 import scala.jdk.CollectionConverters._
 
-private object SbtBuildTargetClassifier extends BspBuildTargetClassifierExtension {
+private class SbtBuildTargetClassifier extends BspBuildTargetClassifierExtension {
   override val name: String = "sbtBsp"
 
   override val separator: String = "/"
