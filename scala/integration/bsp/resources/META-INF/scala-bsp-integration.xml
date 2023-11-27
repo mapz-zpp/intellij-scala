@@ -3,6 +3,6 @@
         <bspProjectOpenProcessorExtension
                 implementation="org.jetbrains.plugins.scala.bsp.flow.open.ScalaBspProjectOpenProcessor"/>
         <bspProjectAwareExtension implementation="org.jetbrains.plugins.scala.bsp.config.ScalaBspProjectAwareExtension"/>
-        <bspBuildTargetClassifierExtension implementation="org.jetbrains.plugins.scala.bsp.extension.SbtBuildTargetClassifier" />
+        <bspBuildTargetClassifierExtension implementation="org.jetbrains.plugins.scala.bsp.extension.ScalaBuildTargetClassifier" />
     </extensions>
 </idea-plugin>
