@@ -16,7 +16,7 @@ class ScalaAssetsExtension extends BuildToolAssetsExtension {
 
   override def getUnloadedTargetIcon: Icon = IconLoader.getIcon("/org/jetbrains/plugins/scala/bsp/images/buildServerProtocolTarget_grey.svg", classOf[ScalaAssetsExtension])
 
-  override def getPresentableName: String = ScalaPluginConstants.SYSTEM_ID.getReadableName
+  override def getPresentableName: String = "sbt"
 
-  override def getBuildToolId: BuildToolId = new BuildToolId(ScalaPluginConstants.SYSTEM_ID.getId)
+  override def getBuildToolId: BuildToolId = new BuildToolId("sbt")
 }
