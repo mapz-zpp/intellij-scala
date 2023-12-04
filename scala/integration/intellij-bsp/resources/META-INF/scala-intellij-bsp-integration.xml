@@ -5,9 +5,6 @@
         <bspProjectAwareExtension implementation="org.jetbrains.plugins.scala.bsp.config.ScalaBspProjectAwareExtension"/>
         <buildTargetClassifierExtension implementation="org.jetbrains.plugins.scala.bsp.extension.ScalaBuildTargetClassifier" />
         <buildToolAssetsExtension implementation="org.jetbrains.plugins.scala.bsp.assets.ScalaAssetsExtension" />
-    </extensions>
-
-    <extensions defaultExtensionNs="org.jetbrains.bsp">
         <scalaSdkGetterExtension implementation="org.jetbrains.plugins.scala.project.bsp.ScalaSdkGetter"/>
     </extensions>
 </idea-plugin>
