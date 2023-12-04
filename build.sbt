@@ -642,7 +642,7 @@ lazy val intellijBspIntegration =
   newProject("intellij-bsp", file("scala/integration/intellij-bsp"))
     .dependsOn(scalaImpl)
     .settings(
-      intellijPlugins += "org.jetbrains.bsp::nightly".toPlugin,
+      intellijPlugins += "org.jetbrains.bsp::nightly".toPlugin
     )
 
 lazy val intelliLangIntegration = newProject(
