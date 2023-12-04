@@ -14,10 +14,6 @@ import java.util.concurrent.TimeUnit
 import scala.collection.immutable.List
 import scala.jdk.CollectionConverters._
 
-private object DefaultProjectViewFile {
-  val DEFAULT_PROJECT_VIEW_FILE_NAME = "projectview.scalaproject" // TODO: is this the right name?
-}
-
 class ScalaBspDetailsConnectionGenerator extends BspConnectionDetailsGeneratorExtension {
   override def id(): String = ScalaPluginConstants.ID
 
