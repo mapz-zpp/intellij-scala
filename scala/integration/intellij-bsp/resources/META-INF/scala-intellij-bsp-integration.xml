@@ -9,7 +9,7 @@
             implementation="org.jetbrains.plugins.scala.bsp.extension.ScalaBuildTargetClassifier" />
         <buildToolAssetsExtension
             implementation="org.jetbrains.plugins.scala.bsp.assets.ScalaAssetsExtension" />
-        <scalaSdkGetterExtension
+        <scalaSdkExtension
             implementation="org.jetbrains.plugins.scala.project.bsp.ScalaSdkExtensionImpl" />
         <bspConnectionDetailsGeneratorExtension
             implementation="org.jetbrains.plugins.scala.bsp.flow.open.ScalaBspDetailsConnectionGenerator" />
