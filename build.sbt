@@ -61,7 +61,6 @@ lazy val scalaCommunity: sbt.Project =
       pluginXml,
     )
     .settings(
-      ideExcludedDirectories    := Seq(baseDirectory.value / "target", baseDirectory.value / "compilation-cache"),
       packageAdditionalProjects := Seq(
         jps,
         compilerJps,
@@ -99,7 +98,6 @@ lazy val scalaApi = newProject(
   "scala-api",
   file("scala/scala-api")
 ).settings(
-      idePackagePrefix := Some("org.jetbrains.plugins.scala"),
     )
 
 lazy val sbtApi =
@@ -107,7 +105,6 @@ lazy val sbtApi =
     .dependsOn(scalaApi, compilerShared)
     .enablePlugins(BuildInfoPlugin)
     .settings(
-      ideExcludedDirectories := Seq(baseDirectory.value / "target"),
       buildInfoPackage := "org.jetbrains.sbt.buildinfo",
       buildInfoKeys := Seq(
         "sbtStructureVersion" -> Versions.sbtStructureVersion,
@@ -278,7 +275,6 @@ lazy val tastyReader = Project("tasty-reader", file("scala/tasty-reader"))
   .settings(
     name := "tasty-reader",
     organization := "JetBrains",
-    idePackagePrefix := Some("org.jetbrains.plugins.scala.tasty.reader"),
     intellijMainJars := Seq.empty,
     scalaVersion := Versions.scala3Version,
     libraryDependencies += "org.scala-lang" % "tasty-core_3" % Versions.scala3Version,
@@ -318,13 +314,6 @@ lazy val scalaImpl: sbt.Project =
       testRunners
     )
     .settings(
-      ideExcludedDirectories := Seq(
-        baseDirectory.value / "target",
-        baseDirectory.value / "testdata" / "projectsForHighlightingTests" / ".ivy_cache",
-        baseDirectory.value / "testdata" / "projectsForHighlightingTests" / ".coursier_cache",
-        //NOTE: when updating, please also update `org.jetbrains.scalateamcity.common.Caching.highlightingPatterns`
-        baseDirectory.value / "testdata" / "projectsForHighlightingTests" / "downloaded",
-      ),
       //scalacOptions in Global += "-Xmacro-settings:analyze-caches",
       libraryDependencies ++= DependencyGroups.scalaCommunity,
 
@@ -608,7 +597,6 @@ lazy val bsp =
       buildInfoPackage := "org.jetbrains.bsp.buildinfo",
       buildInfoKeys := Seq("bloopVersion" -> Versions.bloopVersion),
       buildInfoOptions += BuildInfoOption.ConstantValue,
-      ideExcludedDirectories := Seq(baseDirectory.value / "target")
     )
 
 // Integration with other IDEA plugins
@@ -717,7 +705,6 @@ lazy val runtimeDependencies = project.in(file("target/tools/runtime-dependencie
     scalaVersion := Versions.scalaVersion,
     autoScalaLibrary := false,
     resolvers += Classpaths.sbtPluginReleases,
-    ideSkipProject := true,
     packageMethod := PackagingMethod.DepsOnly(),
     dynamicDependencies := Seq(
       binaryDep("org.scala-sbt", "sbt-launch", Versions.sbtVersion) -> "launcher/sbt-launch.jar",
