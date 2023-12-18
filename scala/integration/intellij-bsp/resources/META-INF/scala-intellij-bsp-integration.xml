@@ -2,7 +2,7 @@
 <idea-plugin>
     <extensions defaultExtensionNs="org.jetbrains.bsp">
         <bspProjectOpenProcessorExtension
-            implementation="org.jetbrains.plugins.scala.bsp.flow.open.ScalaBspProjectOpenProcessor" />
+            implementation="org.jetbrains.plugins.scala.bsp.flow.open.ScalaBspProjectOpenProcessorExtension" />
         <bspProjectAwareExtension
             implementation="org.jetbrains.plugins.scala.bsp.config.ScalaBspProjectAwareExtension" />
         <buildTargetClassifierExtension
@@ -13,5 +13,9 @@
             implementation="org.jetbrains.plugins.scala.project.bsp.ScalaSdkExtensionImpl" />
         <ConnectionDetailsProviderExtension
             implementation="org.jetbrains.plugins.scala.bsp.server.connection.ScalaConnectionDetailsProvider" />
+    </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <projectOpenProcessor
+            implementation="org.jetbrains.plugins.scala.bsp.flow.open.ScalaBspProjectOpenProcessor" />
     </extensions>
 </idea-plugin>

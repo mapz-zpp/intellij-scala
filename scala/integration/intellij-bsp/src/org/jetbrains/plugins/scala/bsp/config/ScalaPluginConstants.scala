@@ -8,5 +8,6 @@ object ScalaPluginConstants {
   val BUILD_TOOL_ID: BuildToolId = new BuildToolId("Sbt")
   val SYSTEM_ID = new ProjectSystemId(ID, "Scala BSP")
   val SUPPORTED_CONFIG_FILE_EXTENSIONS: List[String] = List("sbt")
-  val SUPPORTED_CONFIG_FILE_NAMES: List[String] = List("build", "")
+  val SUPPORTED_CONFIG_FILE_NAMES: List[String] = List("build")
+  val SBT_CONFIG_FILE = "build.sbt"
 }
