@@ -1,8 +1,8 @@
 package org.jetbrains.plugins.scala.bsp.extension
 
+import com.intellij.openapi.diagnostic.Logger
 import org.jetbrains.plugins.bsp.extension.points.{BuildTargetClassifierExtension, BuildToolId}
 import org.jetbrains.plugins.scala.bsp.config.ScalaPluginConstants
-import com.intellij.openapi.diagnostic.Logger
 
 import java.util
 import scala.jdk.CollectionConverters._
