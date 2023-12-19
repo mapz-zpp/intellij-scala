@@ -1,9 +1,12 @@
 package org.jetbrains.plugins.scala.bsp.server.connection
 
 import ch.epfl.scala.bsp4j.BspConnectionDetails
+import com.intellij.modcommand.ModCommand.error
+import com.intellij.openapi.components.{PersistentStateComponent, Service, State, Storage, StoragePathMacros}
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import kotlin.coroutines.Continuation
+import org.jetbrains.bsp.utils.ParsersKt
 import org.jetbrains.plugins.bsp.extension.points.BuildToolId
 import org.jetbrains.plugins.bsp.server.connection.ConnectionDetailsProviderExtension
 import org.jetbrains.plugins.scala.bsp.config.ScalaPluginConstants.BUILD_TOOL_ID
@@ -14,21 +17,54 @@ import scala.jdk.CollectionConverters._
 
 class ScalaConnectionDetailsProvider extends ConnectionDetailsProviderExtension {
   override def onFirstOpening(project: Project, projectPath: VirtualFile, continuation: Continuation[_ >: lang.Boolean]): AnyRef = {
+    saveProjectRootFile(project, projectPath)
     val connectionFile = getConnectionFile(projectPath)
     if (connectionFile.isDefined) {
-      continuation.resumeWith(true)
       return boolean2Boolean(true)
     }
 
     val hasGeneratedFile = generateSbtConnectionFile(projectPath).isDefined
-    continuation.resumeWith(hasGeneratedFile)
     boolean2Boolean(hasGeneratedFile)
   }
 
-  override def provideNewConnectionDetails(project: Project, bspConnectionDetails: BspConnectionDetails): BspConnectionDetails =
-    bspConnectionDetails // For now return current details (Don't know when to generate new ones)
+  override def provideNewConnectionDetails(project: Project, bspConnectionDetails: BspConnectionDetails): BspConnectionDetails = {
+    if (bspConnectionDetails != null) {
+      return bspConnectionDetails
+    }
+
+    val projectRootPath = getProjectRootFile(project) match {
+      case Some(projectFile) => projectFile
+      case None =>
+        error("Cannot obtain project path, please reimport the project.")
+        return bspConnectionDetails
+    }
+
+    val connectionFile = getConnectionFile(projectRootPath) match {
+      case None => generateSbtConnectionFile(projectRootPath)
+      case other => other
+    }
+
+    connectionFile match {
+      case None => null
+      case Some(connectionFile) => parseConnectionFile(connectionFile).orNull
+    }
+  }
+
 
   override def getBuildToolId: BuildToolId = BUILD_TOOL_ID
+
+  private def parseConnectionFile(connectionFile: VirtualFile): Option[BspConnectionDetails] =
+    Option(ParsersKt.parseBspConnectionDetails(connectionFile))
+
+  private def saveProjectRootFile(project: Project, projectRootFile: VirtualFile): Unit =
+    project.getActualComponentManager.getService(classOf[ScalaConnectionDetailsProviderService])
+      .loadState(new ScalaConnectionDetailsProviderMetadata(Option(projectRootFile)))
+
+  private def getProjectRootFile(project: Project): Option[VirtualFile] = {
+    project.getActualComponentManager.getService(classOf[ScalaConnectionDetailsProviderService])
+      .getState
+      .projectRootPath
+  }
 
   private def getConnectionFile(projectPath: VirtualFile): Option[VirtualFile] = {
     getChild(projectPath, List.apply(".bsp", "sbt.json"))
@@ -66,4 +102,22 @@ class ScalaConnectionDetailsProvider extends ConnectionDetailsProviderExtension 
       vf
     })
   }
+}
+
+class ScalaConnectionDetailsProviderMetadata(var projectRootPath: Option[VirtualFile])
+
+@State(
+  name = "ScalaConnectionDetailsProviderService",
+  storages = Array(new Storage(StoragePathMacros.WORKSPACE_FILE)),
+  reportStatistic = true
+)
+@Service(Array(Service.Level.PROJECT))
+final class ScalaConnectionDetailsProviderService extends PersistentStateComponent[ScalaConnectionDetailsProviderMetadata] {
+  private var projectRootPath: Option[VirtualFile] = Option.empty
+
+  override def getState: ScalaConnectionDetailsProviderMetadata =
+    new ScalaConnectionDetailsProviderMetadata(projectRootPath)
+
+  override def loadState(state: ScalaConnectionDetailsProviderMetadata): Unit =
+    this.projectRootPath = state.projectRootPath
 }
