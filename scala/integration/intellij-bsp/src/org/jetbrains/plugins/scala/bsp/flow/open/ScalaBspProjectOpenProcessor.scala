@@ -2,7 +2,6 @@ package org.jetbrains.plugins.scala.bsp.flow.open
 
 import com.intellij.openapi.vfs.VirtualFile
 import org.jetbrains.plugins.bsp.flow.open.BaseBspProjectOpenProcessor
-import org.jetbrains.plugins.scala.bsp.BspFeatureFlags
 import org.jetbrains.plugins.scala.bsp.config.ScalaPluginConstants
 
 
@@ -10,5 +9,5 @@ class ScalaBspProjectOpenProcessor extends BaseBspProjectOpenProcessor(ScalaPlug
   override def getName: String = "Sbt over BSP"
 
   override def canOpenProject(projectPath: VirtualFile): Boolean =
-    BspFeatureFlags.isBspPluginIntegrationEnabled && projectPath != null && projectPath.findChild(ScalaPluginConstants.SBT_CONFIG_FILE) != null
+    projectPath != null && projectPath.findChild(ScalaPluginConstants.SBT_CONFIG_FILE) != null
 }

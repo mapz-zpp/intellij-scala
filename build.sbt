@@ -40,7 +40,7 @@ val definedTestsScopeFilter: ScopeFilter =
 lazy val scalaCommunity: sbt.Project =
   newProject("scalaCommunity", file("."))
     .dependsOn(
-      bsp % "test->test;compile->compile",
+//      bsp % "test->test;compile->compile",
       codeInsight % "test->test;compile->compile",
       conversion % "test->test;compile->compile",
       uast % "test->test;compile->compile",
