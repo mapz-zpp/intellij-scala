@@ -1,8 +1,14 @@
 package org.jetbrains.plugins.scala.bsp.extension
 
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.roots.ProjectRootManager
+import com.intellij.serviceContainer.ComponentManagerImpl
 import org.jetbrains.plugins.bsp.extension.points.{BuildTargetClassifierExtension, BuildToolId}
 import org.jetbrains.plugins.scala.bsp.config.ScalaPluginConstants
+import org.jetbrains.plugins.scala.bsp.server.connection.ScalaConnectionDetailsProviderService
 
 import java.util
 import scala.jdk.CollectionConverters._
@@ -17,7 +23,7 @@ private class ScalaBuildTargetClassifier extends BuildTargetClassifierExtension 
   override def calculateBuildTargetPath(buildTarget: String): util.List[String] = {
     buildTarget match {
       case buildTargetFileRegex(_, path, _) =>
-        path.split("/").toList.asJava
+        path.split("/").toList.takeRight(2).asJava
       case _ =>
         logger.warn(s"buildTargetFileRegex mismatch, s=$buildTarget")
         List.empty.asJava
