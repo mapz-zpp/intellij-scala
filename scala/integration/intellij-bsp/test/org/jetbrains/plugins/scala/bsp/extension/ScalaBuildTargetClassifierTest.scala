@@ -10,7 +10,7 @@ class ScalaBuildTargetClassifierTest extends TestCase {
 
   private val fileBuildTargetId = "file:/home/akowalski/myproject/ZPP/hello_world/#test/Test"
   private val fileBuildTargetPath = List.apply("home", "akowalski", "myproject", "ZPP", "hello_world")
-  private val fileBuildTargetName = "#test/Test"
+  private val fileBuildTargetName = "test-Test"
 
   def testGetBuildTargetName(): Unit = {
     val resultBuildTargetName = classifier.calculateBuildTargetName(fileBuildTargetId)
