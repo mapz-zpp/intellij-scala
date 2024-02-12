@@ -4,6 +4,7 @@ import com.intellij.ide.impl.ProjectUtil
 import org.jetbrains.plugins.bsp.extension.points.{BuildTargetClassifierExtension, BuildToolId}
 import org.jetbrains.plugins.scala.bsp.config.ScalaPluginConstants
 
+import java.io.File
 import java.util
 import scala.jdk.CollectionConverters._
 
@@ -12,33 +13,22 @@ private class ScalaBuildTargetClassifier extends BuildTargetClassifierExtension 
   override val getSeparator = "/"
 
   private def getPathSegments(path: String): Option[Array[String]] = {
-    val splittedPath = path.split("/").filter(segment => segment.nonEmpty)
-
-    if (splittedPath.nonEmpty) {
-      val firstSegment = splittedPath(0)
-
-      if (firstSegment.startsWith("file:")) {
-        Option.apply(splittedPath.drop(1))
-      } else {
-        Option.apply(splittedPath)
-      }
-    } else {
-      None
-    }
+    Option(path.replaceFirst("^file:", "").split(File.separator).filter(_.nonEmpty))
   }
 
   private def getBuildTargetWithStrippedPath(buildTarget: String): Array[String] = {
-    val maybeSplittedBuildTargetPath = getPathSegments(buildTarget)
-    if (maybeSplittedBuildTargetPath.isEmpty) {
-      throw new RuntimeException(s"Splitted buildTarget path cannot be empty. buildTarget = [$buildTarget]")
+    val maybeSplitBuildTargetPath = getPathSegments(buildTarget)
+    if (maybeSplitBuildTargetPath.isEmpty) {
+      throw new RuntimeException(s"Split buildTarget path cannot be empty. buildTarget = [$buildTarget]")
     }
-    val splittedBuildTargetPath = maybeSplittedBuildTargetPath.get
 
-    Option.apply(ProjectUtil.getActiveProject)
+    val splitBuildTargetPath = maybeSplitBuildTargetPath.get
+
+    Option(ProjectUtil.getActiveProject)
       .flatMap(currentProject => getPathSegments(currentProject.getBasePath))
       .filter(projectPathSegments => projectPathSegments.nonEmpty)
-      .map(projectPathSegments => splittedBuildTargetPath.drop(projectPathSegments.length - 1))
-      .getOrElse(splittedBuildTargetPath)
+      .map(projectPathSegments => splitBuildTargetPath.drop(projectPathSegments.length - 1))
+      .getOrElse(splitBuildTargetPath)
   }
 
   override def calculateBuildTargetPath(buildTarget: String): util.List[String] = {
