@@ -13,7 +13,7 @@ private class ScalaBuildTargetClassifier extends BuildTargetClassifierExtension 
   override val getSeparator = "/"
 
   private def getPathSegments(path: String): Option[Array[String]] = {
-    Option(path.replaceFirst("^file:", "").split(File.separator).filter(_.nonEmpty))
+    Option(path.stripPrefix("file:").split(File.separator).filter(_.nonEmpty))
   }
 
   private def getBuildTargetWithStrippedPath(buildTarget: String): Array[String] = {
@@ -33,19 +33,15 @@ private class ScalaBuildTargetClassifier extends BuildTargetClassifierExtension 
 
   override def calculateBuildTargetPath(buildTarget: String): util.List[String] = {
     val buildTargetSegments = getBuildTargetWithStrippedPath(buildTarget)
+    val (nonTargetSegments, _) = buildTargetSegments.span(!_.startsWith("#"))
 
-    val (nonTargetSegments, _) = buildTargetSegments.span(segment => !segment.startsWith("#"))
     nonTargetSegments.toList.asJava
   }
 
   override def calculateBuildTargetName(buildTarget: String): String = {
     val buildTargetSegments = getBuildTargetWithStrippedPath(buildTarget)
-    val (_, targetSegments) = buildTargetSegments.span(segment => !segment.startsWith("#"))
+    val (_, targetSegments) = buildTargetSegments.span(!_.startsWith("#"))
 
-    if (targetSegments.length == 1) {
-      targetSegments(0).stripPrefix("#")
-    } else {
-      targetSegments.map(segment => segment.stripPrefix("#")).mkString("-")
-    }
+    targetSegments.map(_.stripPrefix("#")).mkString("-")
   }
 }
