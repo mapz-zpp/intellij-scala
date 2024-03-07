@@ -12,6 +12,8 @@ private class ScalaBuildTargetClassifier extends BuildTargetClassifierExtension 
   private val logger = Logger.getInstance(this.getClass)
 
   private val buildTargetFileRegex = """(file:/)(.*)/(#[^/]*/[^/]*)""".r
+  private val buildTargetPathTestCompileRegex = """#([^/]+)/(?:Compile|Test)""".r
+  private val buildTargetPathRegex = """#([^/]+)""".r
   override val getBuildToolId: BuildToolId = ScalaPluginConstants.BUILD_TOOL_ID
   override val getSeparator = "/"
 
@@ -23,8 +25,10 @@ private class ScalaBuildTargetClassifier extends BuildTargetClassifierExtension 
     val buildTarget = buildTargetInfo.getId
 
     buildTarget match {
-      case buildTargetFileRegex(_, path, _) =>
+      case buildTargetPathTestCompileRegex(_, path, _) =>
         path.split("/").toList.asJava
+      case buildTargetPathRegex(_, path, _) =>
+        path
       case _ =>
         logger.warn(s"buildTargetFileRegex mismatch, s=$buildTarget")
         List.empty.asJava
