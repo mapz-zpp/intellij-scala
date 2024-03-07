@@ -11,7 +11,6 @@ import scala.jdk.CollectionConverters._
 private class ScalaBuildTargetClassifier extends BuildTargetClassifierExtension {
   private val logger = Logger.getInstance(this.getClass)
 
-  private val buildTargetFileRegex = """(file:/)(.*)/(#[^/]*/[^/]*)""".r
   private val buildTargetPathTestCompileRegex = """#([^/]+)/(?:Compile|Test)""".r
   private val buildTargetPathRegex = """#([^/]+)""".r
   override val getBuildToolId: BuildToolId = ScalaPluginConstants.BUILD_TOOL_ID
@@ -28,7 +27,7 @@ private class ScalaBuildTargetClassifier extends BuildTargetClassifierExtension 
       case buildTargetPathTestCompileRegex(_, path, _) =>
         path.split("/").toList.asJava
       case buildTargetPathRegex(_, path, _) =>
-        path
+        util.List.of(path)
       case _ =>
         logger.warn(s"buildTargetFileRegex mismatch, s=$buildTarget")
         List.empty.asJava
