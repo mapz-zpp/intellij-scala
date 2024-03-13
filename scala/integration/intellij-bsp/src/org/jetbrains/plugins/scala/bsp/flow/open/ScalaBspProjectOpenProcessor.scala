@@ -6,8 +6,12 @@ import org.jetbrains.plugins.scala.bsp.config.ScalaPluginConstants
 
 
 class ScalaBspProjectOpenProcessor extends BaseBspProjectOpenProcessor(ScalaPluginConstants.BUILD_TOOL_ID) {
-  override def getName: String = "Sbt over BSP"
+  override def getName: String = {
+    "Sbt over BSP"
+  }
 
-  override def canOpenProject(projectPath: VirtualFile): Boolean =
+  override def canOpenProject(projectPath: VirtualFile): Boolean = {
+
     projectPath != null && projectPath.findChild(ScalaPluginConstants.SBT_CONFIG_FILE) != null
+  }
 }

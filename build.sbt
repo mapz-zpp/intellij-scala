@@ -631,9 +631,11 @@ lazy val copyrightIntegration =
 
 lazy val intellijBspIntegration =
   newProject("intellij-bsp", file("scala/integration/intellij-bsp"))
-    .dependsOn(scalaImpl)
+    .dependsOn(scalaImpl, sbtImpl)
     .settings(
-      intellijPlugins += "org.jetbrains.bsp::nightly".toPlugin
+      intellijPlugins += "org.jetbrains.bsp::daily".toPlugin.withFallbackDownloadUrl("https://students.mimuw.edu.pl/~ag438477/intellij-bsp-2023.3.0-EAP.zip"),
+//      intellijPlugins += "org.jetbrains.bsp::nightly".toPlugin,
+      packageMethod := PackagingMethod.MergeIntoOther(scalaCommunity)
     )
 
 lazy val gradleIntegration =

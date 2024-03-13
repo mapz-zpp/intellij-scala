@@ -10,7 +10,7 @@ import scala.jdk.CollectionConverters._
 private class ScalaBuildTargetClassifier extends BuildTargetClassifierExtension {
   private val logger = Logger.getInstance(this.getClass)
 
-  private val buildTargetFileRegex = """(file:/)(.*)/(#[^/]*/[^/]*)""".r
+  private val buildTargetFileRegex = """(file:/)(.*)/(#[^/]*/[^/]*|#[^/]*)""".r
   override val getBuildToolId: BuildToolId = ScalaPluginConstants.BUILD_TOOL_ID
   override val getSeparator = "/"
 
