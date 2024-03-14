@@ -17,5 +17,6 @@
     <extensions defaultExtensionNs="com.intellij">
         <projectOpenProcessor
                 implementation="org.jetbrains.plugins.scala.bsp.flow.open.ScalaBspProjectOpenProcessor"/>
+        <moduleConfigurationEditorProvider implementation="org.jetbrains.plugins.scala.project.bsp.sbt.module.SbtBspModuleEditorProvider"/>
     </extensions>
 </idea-plugin>
