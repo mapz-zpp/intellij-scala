@@ -31,7 +31,7 @@ private class SbtBspModuleSettingsEditor(state: ModuleConfigurationState) extend
       case _ =>
         val sbtBuildTarget = sbtBuildModuleInfos.head._1
         val sbtVersion = sbtBuildTarget.getSbtVersion
-        val imports = sbtBuildTarget.getAutoImports
+        val imports = sbtBuildTarget.getAutoImports.asScala.flatMap(_.split(", ")).asJava
         val resolversModel = new ResolversModel(resolvers, state.getProject)
 
         myForm.reset(sbtVersion, imports, resolversModel)
