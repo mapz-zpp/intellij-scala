@@ -6,7 +6,7 @@ import com.intellij.openapi.roots.ui.configuration._
 class SbtBspModuleEditorProvider extends ModuleConfigurationEditorProvider {
   override def createEditors(state: ModuleConfigurationState): Array[ModuleConfigurationEditor] =
     state.getCurrentRootModel.getModule.getName match {
-      case name if name.contains("build") =>
+      case name if name.endsWith("Build") =>
         Array(new SbtBspModuleSettingsEditor(state))
       case _ => Array()
     }

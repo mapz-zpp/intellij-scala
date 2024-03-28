@@ -13,12 +13,12 @@
                 implementation="org.jetbrains.plugins.scala.project.bsp.ScalaSdkExtensionImpl"/>
         <connectionDetailsProviderExtension
                 implementation="org.jetbrains.plugins.scala.bsp.server.connection.ScalaConnectionDetailsProvider"/>
-<!--        <sbtBuildModuleBspExtension-->
-<!--                implementation="org.jetbrains.plugins.scala.project.bsp.sbt.SbtBuildModuleBspExtensionImpl"/>-->
+        <sbtBuildModuleBspExtension
+                implementation="org.jetbrains.plugins.scala.project.bsp.sbt.SbtBuildModuleBspExtensionImpl"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
         <projectOpenProcessor
                 implementation="org.jetbrains.plugins.scala.bsp.flow.open.ScalaBspProjectOpenProcessor"/>
-<!--        <moduleConfigurationEditorProvider implementation="org.jetbrains.plugins.scala.project.bsp.sbt.module.SbtBspModuleEditorProvider"/>-->
+        <moduleConfigurationEditorProvider implementation="org.jetbrains.plugins.scala.project.bsp.sbt.module.SbtBspModuleEditorProvider"/>
     </extensions>
 </idea-plugin>

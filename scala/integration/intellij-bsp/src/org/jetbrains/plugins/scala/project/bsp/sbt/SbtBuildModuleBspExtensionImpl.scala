@@ -28,7 +28,7 @@ case class SbtBuildModuleBspExtensionMetadata(var sbtBuildModuleInfos: List[(Sbt
 
 @State(
   name = "SbtBuildModuleBspExtensionService",
-  storages = Array(new Storage(StoragePathMacros.MODULE_FILE)),
+  storages = Array(new Storage(StoragePathMacros.WORKSPACE_FILE)),
   reportStatistic = true
 )
 @Service(Array(Service.Level.PROJECT))
