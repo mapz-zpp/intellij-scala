@@ -700,8 +700,10 @@ lazy val javaDecompilerIntegration =
 lazy val intellijBspIntegration =
   newProject("intellij-bsp", file("scala/integration/intellij-bsp"))
     .dependsOn(scalaImpl)
+    .dependsOn(sbtImpl)
     .settings(
-      intellijPlugins += "org.jetbrains.bsp::nightly".toPlugin
+      intellijPlugins += "org.jetbrains.bsp::daily".toPlugin.withFallbackDownloadUrl("https://students.mimuw.edu.pl/~ag438477/intellij-bsp-2024.1.0-EAP.zip"),
+      packageMethod := PackagingMethod.MergeIntoOther(scalaCommunity)
     )
 
 lazy val mlCompletionIntegration =
