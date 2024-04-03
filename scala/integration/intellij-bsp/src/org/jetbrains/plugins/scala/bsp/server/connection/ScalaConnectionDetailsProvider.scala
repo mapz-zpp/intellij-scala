@@ -23,11 +23,13 @@ class ScalaConnectionDetailsProvider extends ConnectionDetailsProviderExtension 
       saveProjectRootFile(project, projectPath)
       val connectionFile = getConnectionFile(projectPath)
       if (connectionFile.isDefined) {
+        // connection file already exists - exit
         cont.resume(true)
+      } else {
+        // generate our own connection file
+        val hasGeneratedFile = generateSbtConnectionFile(projectPath).isDefined
+        cont.resume(hasGeneratedFile)
       }
-
-      val hasGeneratedFile = generateSbtConnectionFile(projectPath).isDefined
-      cont.resume(hasGeneratedFile)
     }, continuation)
   }
 
