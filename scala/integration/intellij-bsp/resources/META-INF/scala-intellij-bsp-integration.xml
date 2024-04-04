@@ -8,7 +8,7 @@
         <buildTargetClassifierExtension
                 implementation="org.jetbrains.plugins.scala.bsp.extension.ScalaBuildTargetClassifier"/>
         <buildToolAssetsExtension
-                implementation="org.jetbrains.plugins.scala.bsp.assets.ScalaAssetsExtension"/>
+                implementation="org.jetbrains.plugins.scala.bsp.assets.SbtAssetsExtension"/>
         <scalaSdkExtension
                 implementation="org.jetbrains.plugins.scala.project.bsp.ScalaSdkExtensionImpl"/>
         <connectionDetailsProviderExtension
