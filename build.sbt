@@ -40,7 +40,7 @@ val definedTestsScopeFilter: ScopeFilter =
 lazy val scalaCommunity: sbt.Project =
   newProject("scalaCommunity", file("."))
     .dependsOn(
-      bsp % "test->test;compile->compile",
+      // bsp % "test->test;compile->compile",
       codeInsight % "test->test;compile->compile",
       conversion % "test->test;compile->compile",
       uast % "test->test;compile->compile",
@@ -55,6 +55,7 @@ lazy val scalaCommunity: sbt.Project =
       gradleIntegration % "test->test;compile->compile",
       intelliLangIntegration % "test->test;compile->compile",
       mavenIntegration % "test->test;compile->compile",
+      intellijBspIntegration % "test->test;compile->compile",
       propertiesIntegration % "test->test;compile->compile",
       mlCompletionIntegration % "test->test;compile->compile",
       pluginXml,
@@ -150,7 +151,7 @@ lazy val uast = newProject(
 lazy val worksheet =
   newProject("worksheet", file("scala/worksheet"))
     .dependsOn(
-      bsp,
+      // bsp,
       compilerIntegration % "test->test;compile->compile",
       worksheetReplInterface % "test->test;compile->compile",
       repl % "test->test;compile->compile", //do we indeed need this dependency on Scala REPL? can we get rid of it?
@@ -397,7 +398,7 @@ lazy val compilerIntegration =
       scalaImpl % "test->test;compile->compile",
       sbtImpl % "test->test;compile->compile",
       jps,
-      bsp
+      // bsp
     )
     .settings(
       intellijPlugins ++= Seq(
@@ -525,7 +526,7 @@ lazy val testingSupport =
     .dependsOn(
       scalaImpl % "test->test;compile->compile",
       sbtImpl % "test->test;compile->compile",
-      bsp,
+      // bsp,
       structureView % "test->test;compile->compile",
       compilerIntegration % "test->test;compile->compile"
     )
@@ -628,23 +629,6 @@ lazy val decompiler =
       packageMethod := PackagingMethod.Standalone("lib/scalap.jar")
     )
 
-lazy val bsp =
-  newProject("bsp", file("bsp"))
-    .enablePlugins(BuildInfoPlugin)
-    .dependsOn(
-      scalaImpl % "test->test;compile->compile",
-      sbtImpl % "test->test;compile->compile"
-    )
-    .settings(
-      libraryDependencies ++= DependencyGroups.bsp,
-      intellijPlugins += "JUnit".toPlugin,
-      intellijPlugins += "org.jetbrains.plugins.terminal".toPlugin,
-      buildInfoPackage := "org.jetbrains.bsp.buildinfo",
-      buildInfoKeys := Seq("bloopVersion" -> Versions.bloopVersion),
-      buildInfoOptions += BuildInfoOption.ConstantValue,
-      ideExcludedDirectories := Seq(baseDirectory.value / "target")
-    )
-
 // Integration with other IDEA plugins
 //TODO: rename the module module and maybe base packages (check external usages)
 // it actually doesn't have anything related to actual devkit integration, it doesn't depend on anything from it
@@ -711,6 +695,13 @@ lazy val javaDecompilerIntegration =
     .settings(
       intellijPlugins += "org.jetbrains.java.decompiler".toPlugin,
       packageMethod := PackagingMethod.MergeIntoOther(scalaCommunity)
+    )
+
+lazy val intellijBspIntegration =
+  newProject("intellij-bsp", file("scala/integration/intellij-bsp"))
+    .dependsOn(scalaImpl)
+    .settings(
+      intellijPlugins += "org.jetbrains.bsp::nightly".toPlugin
     )
 
 lazy val mlCompletionIntegration =
