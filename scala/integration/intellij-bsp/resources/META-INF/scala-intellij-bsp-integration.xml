@@ -11,7 +11,7 @@
                 implementation="org.jetbrains.plugins.scala.bsp.assets.SbtAssetsExtension"/>
         <scalaSdkExtension
                 implementation="org.jetbrains.plugins.scala.project.bsp.ScalaSdkExtensionImpl"/>
-        <connectionDetailsProviderExtension
+        <connectionDetailsProviderExtensionJavaShim
                 implementation="org.jetbrains.plugins.scala.bsp.server.connection.ScalaConnectionDetailsProvider"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
