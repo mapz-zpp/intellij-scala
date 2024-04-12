@@ -9,6 +9,7 @@ import org.jetbrains.plugins.bsp.extension.points.BuildToolId
 import org.jetbrains.plugins.bsp.server.connection.ConnectionDetailsProviderExtensionJavaShim
 import org.jetbrains.plugins.scala.bsp.ScalaBspMetadataStorage
 import org.jetbrains.plugins.scala.bsp.config.ScalaPluginConstants.BUILD_TOOL_ID
+import org.jetbrains.sbt.SbtUtil
 
 import java.lang
 import java.util.concurrent.{CompletableFuture, TimeUnit}
@@ -36,7 +37,14 @@ class ScalaConnectionDetailsProvider extends ConnectionDetailsProviderExtensionJ
 
   private def generateConnectionFile(projectPath: VirtualFile): CompletableFuture[lang.Boolean] =
     CompletableFuture.supplyAsync(() => {
-      val process = new ProcessBuilder("coursier", "launch", "sbt", "--", "bspConfig")
+      val processArgs = List(
+        "java",
+        "-jar",
+        SbtUtil.getDefaultLauncher.toPath.toString,
+        "bspConfig"
+      )
+
+      val process = new ProcessBuilder(processArgs.asJava)
         .directory(projectPath.toNioPath.toFile)
         .start()
 
