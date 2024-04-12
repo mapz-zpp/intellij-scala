@@ -701,7 +701,7 @@ lazy val intellijBspIntegration =
   newProject("intellij-bsp", file("scala/integration/intellij-bsp"))
     .dependsOn(scalaImpl, sbtImpl)
     .settings(
-      intellijPlugins += "org.jetbrains.bsp::nightly".toPlugin
+      intellijPlugins += "org.jetbrains.bsp::daily".toPlugin.withFallbackDownloadUrl("https://storage.googleapis.com/mapz-intellij-bsp/intellij-bsp-mapz.zip")
     )
 
 lazy val mlCompletionIntegration =
