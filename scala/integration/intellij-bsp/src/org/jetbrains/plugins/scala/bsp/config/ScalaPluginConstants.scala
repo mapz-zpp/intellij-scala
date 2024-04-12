@@ -10,4 +10,5 @@ object ScalaPluginConstants {
   val SUPPORTED_CONFIG_FILE_EXTENSIONS: List[String] = List("sbt")
   val SUPPORTED_CONFIG_FILE_NAMES: List[String] = List("build")
   val SBT_CONFIG_FILE = "build.sbt"
+  val SBT_TAB_NAME = "sbt"
 }
