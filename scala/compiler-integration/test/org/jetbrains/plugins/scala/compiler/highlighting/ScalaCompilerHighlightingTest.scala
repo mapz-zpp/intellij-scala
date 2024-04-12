@@ -134,7 +134,7 @@ class ScalaCompilerHighlightingTest_3_2 extends ScalaCompilerHighlightingTest_3 
 }
 
 class ScalaCompilerHighlightingTest_3_3 extends ScalaCompilerHighlightingTest_3 {
-  override implicit def version: ScalaVersion = ScalaVersion.Latest.Scala_3_3
+  override protected def supportedIn(version: ScalaVersion): Boolean = version == ScalaVersion.Latest.Scala_3_3
 
   private def runTestUnusedImports(): Unit = {
     setCompilerOptions("-Wunused:imports")
@@ -237,6 +237,14 @@ class ScalaCompilerHighlightingTest_3_3 extends ScalaCompilerHighlightingTest_3 
   override def testWarningHighlighting_UseCompilerRangesDisabled(): Unit = withUseCompilerRangesDisabled {
     runTestWarningHighlighting(Seq("Insert missing cases (1)"))
   }
+}
+
+class ScalaCompilerHighlightingTest_3_4 extends ScalaCompilerHighlightingTest_3_3 {
+  override protected def supportedIn(version: ScalaVersion): Boolean = version == ScalaVersion.Latest.Scala_3_4
+}
+
+class ScalaCompilerHighlightingTest_3_RC extends ScalaCompilerHighlightingTest_3_4 {
+  override protected def supportedIn(version: ScalaVersion): Boolean = version == ScalaVersion.Latest.Scala_3_RC
 }
 
 abstract class ScalaCompilerHighlightingTest_3 extends ScalaCompilerHighlightingTestBase with ScalaCompilerHighlightingCommonScala2Scala3Test {

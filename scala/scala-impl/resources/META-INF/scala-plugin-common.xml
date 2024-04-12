@@ -90,6 +90,7 @@
         <refactoring.moveMemberHandler language="Scala" implementationClass="org.jetbrains.plugins.scala.lang.refactoring.move.members.ScalaMoveMemberHandler"/>
         <refactoring.moveHandler implementation="org.jetbrains.plugins.scala.lang.refactoring.move.anonymousToInner.ScalaMoveAnonymousToInnerDelegate" order="first" id="scalaMoveAnonymousToInnerDelegate"/>
         <refactoring.moveHandler implementation="org.jetbrains.plugins.scala.lang.refactoring.move.members.ScalaMoveMembersHandler" order="first, after scalaMoveAnonymousToInnerDelegate" id="scalaMoveMembersHandler"/>
+        <refactoring.moveHandler implementation="org.jetbrains.plugins.scala.lang.refactoring.move.ScalaMoveFilesOrDirectoriesHandler" id="moveScalaFileOrDir" order="first, before moveJavaFileOrDir"/>
         <refactoring.moveHandler implementation="org.jetbrains.plugins.scala.lang.refactoring.move.ScalaMoveClassesOrPackagesHandler" order="first, after scalaMoveMembersHandler"/>
         <refactoring.moveAllClassesInFileHandler implementation="org.jetbrains.plugins.scala.lang.refactoring.move.MoveScalaClassesInFileHandler" order="last"/>
         <!--Should go before com.intellij.refactoring.copy.CopyClassesHandler -->
@@ -376,6 +377,7 @@
         <renameHandler implementation="org.jetbrains.plugins.scala.lang.refactoring.rename.XmlRenameHandler"/>
         <renameHandler implementation="org.jetbrains.plugins.scala.lang.refactoring.rename.inplace.ScalaMemberInplaceRenameHandler" order="first"/>
         <renameHandler implementation="org.jetbrains.plugins.scala.lang.refactoring.rename.inplace.ScalaLocalInplaceRenameHandler" order="first"/>
+        <vetoRenameCondition implementation="org.jetbrains.plugins.scala.lang.refactoring.rename.ScalaVetoDefaultRenameCondition" />
         <nameSuggestionProvider
                 implementation="org.jetbrains.plugins.scala.lang.refactoring.namesSuggester.ScalaNameSuggestionProvider"
                 id="scalaNameSuggestionProvider" order="last"/>
@@ -628,7 +630,7 @@
         <registryKey key="scalafmt.min.time.between.format.on.save.action.ms" defaultValue="300" restartRequired="false"
                      description="Minimum allowed time between 'Format on Save' triggers (when Scalafmt formatter is enabled)"/>
 
-        <registryKey key="scala.compiler.highlighting.suppress.java.highlighting" defaultValue="false" restartRequired="false"
+        <registryKey key="scala.compiler.highlighting.suppress.java.highlighting" defaultValue="true" restartRequired="false"
                      description="If enabled, Scala 3 compiler based highlighting suppresses built-in highlighting of Java files in mixed Scala 3 and Java projects (Java are not highlighted)"/>
 
         <spellchecker.bundledDictionaryProvider implementation="org.jetbrains.plugins.scala.spellchecker.ScalaBundledDictionaryProvider"/>
