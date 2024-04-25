@@ -59,7 +59,7 @@ package object project {
       case _ => false
     }
 
-    def libraryVersion: Option[String] = name.flatMap(LibraryVersion.findFirstIn)
+    def libraryVersion: Option[String] = name.flatMap(guessLibraryVersionFromName)
 
     def hasRuntimeLibrary: Boolean = name.exists(isRuntimeLibrary)
 
@@ -75,7 +75,18 @@ package object project {
 
   object LibraryExt {
 
-    private val LibraryVersion = "(?<=[:\\-])\\d+\\.\\d+\\.\\d+[^:\\s]*".r
+    @TestOnly
+    def guessLibraryVersionFromName(libraryName: String): Option[String] =
+      LibraryVersion.findFirstIn(libraryName)
+
+    /**
+     * Examples (see tests for more examples):
+     *  - anything-here-1.22.3
+     *  - anything-here:1.22.3
+     *  - anything-here_1.22.3
+     *  - anything-here-1.22.3-bin-db-2-fd41f6b
+     */
+    private val LibraryVersion = """(?<=[:_\-])\d+\.\d+\.\d+[^:\s]*""".r
 
     private[this] val RuntimeLibrary = "((?:scala|dotty|scala3)-library).+".r
 
@@ -348,8 +359,11 @@ package object project {
     def isSAMEnabled: Boolean =
       scalaModuleSettings.exists(_.isSAMEnabled)
 
-    def isSource3Enabled: Boolean =
-      scalaModuleSettings.exists(_.hasSource3Flag)
+    def XSource3Flag: ScalaXSourceFlag = scalaModuleSettings.fold(ScalaXSourceFlag.None)(_.XSourceFlag)
+
+    def isSource3OrSource3Cross: Boolean = XSource3Flag != ScalaXSourceFlag.None
+    def isSource3CrossEnabled: Boolean   = XSource3Flag == ScalaXSourceFlag.XSource3Cross
+    def isSource3Enabled: Boolean        = XSource3Flag == ScalaXSourceFlag.XSource3
 
     def features: SerializableScalaFeatures =
       scalaModuleSettings.fold(ScalaFeatures.default)(_.features)
@@ -596,7 +610,11 @@ package object project {
 
     def isSource3Enabled: Boolean = isDefinedInModuleOrProject(_.isSource3Enabled)
 
-    def isScala3OrSource3Enabled: Boolean = isDefinedInModuleOrProject(m => m.hasScala3 || m.isSource3Enabled)
+    def isSource3CrossEnabled = isDefinedInModuleOrProject(_.isSource3CrossEnabled)
+
+    def isSource3OrSource3CrossEnabled = isDefinedInModuleOrProject(_.isSource3OrSource3Cross)
+
+    def isScala3OrSource3Enabled: Boolean = isDefinedInModuleOrProject(m => m.hasScala3 || m.isSource3OrSource3Cross)
 
     private def featuresOpt: Option[SerializableScalaFeatures] = {
       val file = Option(element.getContainingFile)
