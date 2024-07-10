@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<idea-plugin>
+    <extensions defaultExtensionNs="org.jetbrains.bsp">
+        <bspProjectOpenProcessorExtension
+                implementation="org.jetbrains.plugins.scala.bsp.flow.open.ScalaBspProjectOpenProcessorExtension"/>
+        <bspProjectAwareExtension
+                implementation="org.jetbrains.plugins.scala.bsp.config.ScalaBspProjectAwareExtension"/>
+        <buildTargetClassifierExtension
+                implementation="org.jetbrains.plugins.scala.bsp.extension.ScalaBuildTargetClassifier"/>
+        <buildToolAssetsExtension
+                implementation="org.jetbrains.plugins.scala.bsp.assets.SbtAssetsExtension"/>
+        <scalaSdkExtension
+                implementation="org.jetbrains.plugins.scala.project.bsp.ScalaSdkExtensionImpl"/>
+        <connectionDetailsProviderExtensionJavaShim
+                implementation="org.jetbrains.plugins.scala.bsp.server.connection.ScalaConnectionDetailsProvider"/>
+        <sbtBuildModuleBspExtension
+                implementation="org.jetbrains.plugins.scala.project.bsp.sbt.SbtBuildModuleBspExtensionImpl"/>
+    </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <projectOpenProcessor
+                implementation="org.jetbrains.plugins.scala.bsp.flow.open.ScalaBspProjectOpenProcessor"/>
+        <moduleConfigurationEditorProvider implementation="org.jetbrains.plugins.scala.project.bsp.sbt.module.SbtBspModuleEditorProvider"/>
+    </extensions>
+</idea-plugin>

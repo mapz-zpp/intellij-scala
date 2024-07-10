@@ -15,7 +15,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.module.ModuleManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ModuleRootManager
-import com.intellij.profiler.ultimate.widget.JavaConsoleWithProfilerWidget
+//import com.intellij.profiler.ultimate.widget.JavaConsoleWithProfilerWidget
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.file.PsiDirectoryFactory
 import com.intellij.testFramework.EdtTestUtil
@@ -140,21 +140,21 @@ abstract class ScalaTestingTestCase
       val runner = ProgramRunner.PROGRAM_RUNNER_EP.getExtensions.find(_.getClass == classOf[DefaultJavaProgramRunner]).get
       val (handler, runContentDescriptor) = runProcess(runConfig, classOf[DefaultRunExecutor], runner, Seq(testResultListener))
 
-      runContentDescriptor.getExecutionConsole match {
-        case widget: JavaConsoleWithProfilerWidget =>
-          Try(widget.getClass.getDeclaredField("console")).foreach { consoleField =>
-            Try {
-              consoleField.setAccessible(true)
-              consoleField.get(widget) match {
-                case console: SMTRunnerConsoleView =>
-                  testTreeRoot = Some(console.getResultsViewer.getRoot)
-              }
-            }
-          }
-        case descriptor: SMTRunnerConsoleView =>
-          testTreeRoot = Some(descriptor.getResultsViewer.getRoot)
-        case _ =>
-      }
+      //      runContentDescriptor.getExecutionConsole match {
+      //        case widget: JavaConsoleWithProfilerWidget =>
+      //          Try(widget.getClass.getDeclaredField("console")).foreach { consoleField =>
+      //            Try {
+      //              consoleField.setAccessible(true)
+      //              consoleField.get(widget) match {
+      //                case console: SMTRunnerConsoleView =>
+      //                  testTreeRoot = Some(console.getResultsViewer.getRoot)
+      //              }
+      //            }
+      //          }
+      //        case descriptor: SMTRunnerConsoleView =>
+      //          testTreeRoot = Some(descriptor.getResultsViewer.getRoot)
+      //        case _ =>
+      //      }
 
       (handler, runContentDescriptor)
     })

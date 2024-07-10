@@ -50,12 +50,13 @@
     <depends optional="true" config-file="scala-features-trainer-integration.xml">training</depends>
     <depends optional="true" config-file="textAnalysis.xml">tanvd.grazi</depends>
     <depends optional="true" config-file="scala-junit-integration.xml">JUnit</depends>
+    <depends optional="true" config-file="scala-intellij-bsp-integration.xml">org.jetbrains.bsp</depends>
 <!--    <depends optional="true" config-file="packagesearch.xml">com.jetbrains.packagesearch.intellij-plugin</depends>-->
 
     <xi:include href="/META-INF/sbt-api.xml" xpointer="xpointer(/idea-plugin/*)"/>
     <xi:include href="/META-INF/scala-plugin-common.xml" xpointer="xpointer(/idea-plugin/*)"/>
     <xi:include href="/META-INF/sbt.xml" xpointer="xpointer(/idea-plugin/*)"/>
-    <xi:include href="/META-INF/BSP.xml" xpointer="xpointer(/idea-plugin/*)"/>
+<!--    <xi:include href="/META-INF/BSP.xml" xpointer="xpointer(/idea-plugin/*)"/>-->
     <xi:include href="/META-INF/codeInsight.xml" xpointer="xpointer(/idea-plugin/*)"/>
     <xi:include href="/META-INF/conversion.xml" xpointer="xpointer(/idea-plugin/*)"/>
     <xi:include href="/META-INF/compiler-integration.xml" xpointer="xpointer(/idea-plugin/*)"/>
