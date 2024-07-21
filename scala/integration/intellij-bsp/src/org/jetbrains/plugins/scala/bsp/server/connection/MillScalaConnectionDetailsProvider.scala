@@ -9,11 +9,15 @@ import org.jetbrains.plugins.bsp.extension.points.BuildToolId
 import org.jetbrains.plugins.bsp.server.connection.ConnectionDetailsProviderExtensionJavaShim
 import org.jetbrains.plugins.scala.bsp.ScalaBspMetadataStorage
 import org.jetbrains.plugins.scala.bsp.config.MillScalaPluginConstants.BUILD_TOOL_ID
+//import scala.sys.process._
 import org.jetbrains.sbt.SbtUtil
 
+import java.io.File
 import java.lang
 import java.util.concurrent.{CompletableFuture, TimeUnit}
+import scala.util.Try
 import scala.jdk.CollectionConverters._
+
 
 class MillScalaConnectionDetailsProvider extends ConnectionDetailsProviderExtensionJavaShim {
   private def getConnectionFile(projectPath: VirtualFile): Option[VirtualFile] = {
@@ -35,10 +39,11 @@ class MillScalaConnectionDetailsProvider extends ConnectionDetailsProviderExtens
     })
   }
 
-  private def generateConnectionFile(projectPath: VirtualFile): CompletableFuture[lang.Boolean] =
+  private def generateConnectionFile(projectPath: VirtualFile): CompletableFuture[lang.Boolean] = {
+
     CompletableFuture.supplyAsync(() => {
       val processArgs = List(
-        "mill",
+        s"${projectPath.toNioPath.toString}/mill",
         "mill.bsp.BSP/install"
       )
 
@@ -50,11 +55,13 @@ class MillScalaConnectionDetailsProvider extends ConnectionDetailsProviderExtens
       if (process.exitValue() != 0) {
         val processInput = process.inputReader.lines.toList.asScala.mkString
         val processError = process.errorReader.lines.toList.asScala.mkString
-        throw new RuntimeException(s"Mill bsp file generation failed. stdout=[$processInput], stderr=[$processError]")
+        throw new RuntimeException(s"Sbt bsp file genration with coursier failed. stdout=[$processInput], stderr=[$processError]")
       }
 
       getConnectionFile(projectPath).isDefined
     })
+  }
+
 
   override def onFirstOpening(project: Project, projectPath: VirtualFile): CompletableFuture[lang.Boolean] = {
     val metadataStorage = ScalaBspMetadataStorage(project)
