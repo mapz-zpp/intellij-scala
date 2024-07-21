@@ -2,23 +2,20 @@
 <idea-plugin>
     <extensions defaultExtensionNs="org.jetbrains.bsp">
         <bspProjectOpenProcessorExtension
-                implementation="org.jetbrains.plugins.scala.bsp.flow.open.ScalaBspProjectOpenProcessorExtension"/>
+                implementation="org.jetbrains.plugins.scala.bsp.flow.open.MillScalaBspProjectOpenProcessorExtension"/>
         <bspProjectAwareExtension
-                implementation="org.jetbrains.plugins.scala.bsp.config.ScalaBspProjectAwareExtension"/>
+                implementation="org.jetbrains.plugins.scala.bsp.config.MillScalaBspProjectAwareExtension"/>
         <buildTargetClassifierExtension
-                implementation="org.jetbrains.plugins.scala.bsp.extension.ScalaBuildTargetClassifier"/>
+                implementation="org.jetbrains.plugins.scala.bsp.extension.MillScalaBuildTargetClassifier"/>
         <buildToolAssetsExtension
-                implementation="org.jetbrains.plugins.scala.bsp.assets.SbtAssetsExtension"/>
+                implementation="org.jetbrains.plugins.scala.bsp.assets.MillAssetsExtension"/>
         <scalaSdkExtension
                 implementation="org.jetbrains.plugins.scala.project.bsp.ScalaSdkExtensionImpl"/>
         <connectionDetailsProviderExtensionJavaShim
-                implementation="org.jetbrains.plugins.scala.bsp.server.connection.ScalaConnectionDetailsProvider"/>
-        <sbtBuildModuleBspExtension
-                implementation="org.jetbrains.plugins.scala.project.bsp.sbt.SbtBuildModuleBspExtensionImpl"/>
+                implementation="org.jetbrains.plugins.scala.bsp.server.connection.MillScalaConnectionDetailsProvider"/>
     </extensions>
     <extensions defaultExtensionNs="com.intellij">
         <projectOpenProcessor
-                implementation="org.jetbrains.plugins.scala.bsp.flow.open.ScalaBspProjectOpenProcessor"/>
-        <moduleConfigurationEditorProvider implementation="org.jetbrains.plugins.scala.project.bsp.sbt.module.SbtBspModuleEditorProvider"/>
+                implementation="org.jetbrains.plugins.scala.bsp.flow.open.MillScalaBspProjectOpenProcessor"/>
     </extensions>
 </idea-plugin>
