@@ -39,6 +39,8 @@
     <idea-version since-build="242.19533" until-build="242.*"/>
 
     <depends>com.intellij.modules.java</depends>
+    <depends optional="true" config-file="scala-intellij-bsp-integration.xml">org.jetbrains.bsp</depends>
+    <depends optional="true" config-file="scala-intellij-bsp-integration.xml">org.jetbrains.bsp</depends>
     <depends optional="true" config-file="scala-maven-integration.xml">org.jetbrains.idea.maven</depends>
     <depends optional="true" config-file="intellilang-scala-support.xml">org.intellij.intelliLang</depends>
     <depends optional="true" config-file="copyright.xml">com.intellij.copyright</depends>
@@ -56,7 +58,7 @@
     <xi:include href="/META-INF/sbt-api.xml" xpointer="xpointer(/idea-plugin/*)"/>
     <xi:include href="/META-INF/scala-plugin-common.xml" xpointer="xpointer(/idea-plugin/*)"/>
     <xi:include href="/META-INF/sbt.xml" xpointer="xpointer(/idea-plugin/*)"/>
-<!--    <xi:include href="/META-INF/BSP.xml" xpointer="xpointer(/idea-plugin/*)"/>-->
+    <xi:include href="/META-INF/BSP.xml" xpointer="xpointer(/idea-plugin/*)"/>
     <xi:include href="/META-INF/codeInsight.xml" xpointer="xpointer(/idea-plugin/*)"/>
     <xi:include href="/META-INF/conversion.xml" xpointer="xpointer(/idea-plugin/*)"/>
     <xi:include href="/META-INF/compiler-integration.xml" xpointer="xpointer(/idea-plugin/*)"/>

@@ -47,6 +47,7 @@ val definedTestsScopeFilter: ScopeFilter =
 lazy val scalaCommunity: sbt.Project =
   newProject("scalaCommunity", file("."))
     .dependsOn(
+      bsp % "test->test;compile->compile",
       codeInsight % "test->test;compile->compile",
       conversion % "test->test;compile->compile",
       uast % "test->test;compile->compile",
@@ -160,6 +161,7 @@ lazy val uast = newProject(
 lazy val worksheet =
   newProject("worksheet", file("scala/worksheet"))
     .dependsOn(
+       bsp,
       compilerIntegration % "test->test;compile->compile",
       worksheetReplInterface % "test->test;compile->compile",
       repl % "test->test;compile->compile", //do we indeed need this dependency on Scala REPL? can we get rid of it?
@@ -306,6 +308,24 @@ lazy val repl = newProject("repl", file("scala/repl"))
     packageMethod := PackagingMethod.MergeIntoOther(scalaCommunity)
   )
 
+lazy val bsp =
+  newProject("bsp", file("bsp"))
+    .enablePlugins(BuildInfoPlugin)
+    .dependsOn(
+      scalaImpl % "test->test;compile->compile",
+      sbtImpl % "test->test;compile->compile"
+    )
+    .settings(
+      libraryDependencies ++= DependencyGroups.bsp,
+      intellijPlugins += "JUnit".toPlugin,
+      intellijPlugins += "org.jetbrains.plugins.terminal".toPlugin,
+      buildInfoPackage := "org.jetbrains.bsp.buildinfo",
+      buildInfoKeys := Seq("bloopVersion" -> Versions.bloopVersion),
+      buildInfoOptions += BuildInfoOption.ConstantValue,
+      ideExcludedDirectories := Seq(baseDirectory.value / "target")
+    )
+
+
 lazy val tastyReader = Project("tasty-reader", file("scala/tasty-reader"))
   .dependsOn(scalaLanguageUtils)
   .dependsOn(scalaLanguageUtilsRt)
@@ -432,6 +452,7 @@ lazy val compilerIntegration =
       scalaImpl % "test->test;compile->compile",
       sbtImpl % "test->test;compile->compile",
       jps,
+       bsp
     )
     .settings(
       intellijPlugins ++= Seq(
@@ -545,6 +566,7 @@ lazy val testingSupport =
     .dependsOn(
       scalaImpl % "test->test;compile->compile",
       sbtImpl % "test->test;compile->compile",
+       bsp,
       structureView % "test->test;compile->compile",
       compilerIntegration % "test->test;compile->compile"
     )
@@ -733,7 +755,7 @@ lazy val intellijBspIntegration =
   newProject("intellij-bsp", file("scala/integration/intellij-bsp"))
     .dependsOn(scalaImpl, sbtImpl)
     .settings(
-      intellijPlugins += "org.jetbrains.bsp::nightly".toPlugin.withFallbackDownloadUrl("https://students.mimuw.edu.pl/~ag438477/intellij-bsp-2024.1.0-EAP.zip")
+      intellijPlugins += "org.jetbrains.bsp::daily".toPlugin.withFallbackDownloadUrl("https://students.mimuw.edu.pl/~ag438477/intellij-bsp-2024.1.0-EAP.zip")
     )
 
 lazy val mlCompletionIntegration =
