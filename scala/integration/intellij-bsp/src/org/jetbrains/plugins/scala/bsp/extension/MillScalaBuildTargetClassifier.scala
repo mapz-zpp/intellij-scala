@@ -34,6 +34,7 @@ class MillScalaBuildTargetClassifier extends BuildTargetClassifierExtension {
     } else {
       displayName
     }
+    println(util.List.of(formattedDisplayName))
 
     util.List.of(formattedDisplayName)
   }
