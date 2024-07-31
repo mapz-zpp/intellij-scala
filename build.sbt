@@ -5,6 +5,7 @@ import LocalRepoPackager.{localRepoDependencies, localRepoUpdate, relativeJarPat
 import org.jetbrains.sbtidea.Keys.*
 
 import java.nio.file.Path
+import org.jetbrains.sbtidea.PluginJars
 
 // Global build settings
 
@@ -360,6 +361,7 @@ lazy val packageSearchClient: sbt.Project =
       Compile / scalacOptions := globalScala3ScalacOptions,
       resolvers += DependencyResolvers.PackageSearch,
       libraryDependencies += Dependencies.packageSearchClientJvm,
+      packageMethod := PackagingMethod.MergeIntoOther(scalaCommunity)
     )
 
 lazy val scalacPatches: sbt.Project =
@@ -765,7 +767,7 @@ lazy val intellijBspIntegration =
   newProject("intellij-bsp", file("scala/integration/intellij-bsp"))
     .dependsOn(scalaImpl, sbtImpl)
     .settings(
-      intellijPlugins += "org.jetbrains.bsp::daily".toPlugin.withFallbackDownloadUrl("https://students.mimuw.edu.pl/~ag438477/intellij-bsp-2024.1.0-EAP.zip"),
+      intellijPlugins += "org.jetbrains.bsp::daily".toPlugin.withFallbackDownloadUrl("https://storage.googleapis.com/mapz-intellij-bsp/intellij-bsp-mapz.zip"),
       packageMethod := PackagingMethod.Standalone("lib/modules/newBsp.jar")
     )
 
