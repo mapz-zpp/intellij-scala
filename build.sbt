@@ -2,10 +2,9 @@ import Common.*
 import Dependencies.provided
 import DynamicDependenciesFetcher.*
 import LocalRepoPackager.{localRepoDependencies, localRepoUpdate, relativeJarPath, sbtDep}
-import org.jetbrains.sbtidea.Keys.{intellijPlugins, *}
+import org.jetbrains.sbtidea.Keys.*
 
 import java.nio.file.Path
-import org.jetbrains.sbtidea.PluginJars
 
 // Global build settings
 
@@ -103,14 +102,17 @@ lazy val scalaApi = newProject(
   "scala-api",
   file("scala/scala-api")
 ).settings(
-      idePackagePrefix := Some("org.jetbrains.plugins.scala"),
-    )
+  idePackagePrefix := Some("org.jetbrains.plugins.scala"),
+  packageMethod := PackagingMethod.MergeIntoOther(scalaCommunity)
+)
 
 lazy val workspaceEntities = newProjectWithKotlin("workspace-entities", file("sbt/sbt-impl/workspace-entities"))
   .settings(
     Compile / unmanagedSourceDirectories ++= Seq(baseDirectory.value/"gen"),
     scalaVersion := Versions.scala3Version,
-    Compile / scalacOptions := globalScala3ScalacOptions
+    Compile / scalacOptions := globalScala3ScalacOptions,
+    packageMethod := PackagingMethod.MergeIntoOther(scalaCommunity)
+
   )
 
 lazy val sbtApi =
@@ -131,7 +133,9 @@ lazy val sbtApi =
         "sbtStructurePath_1_2" -> relativeJarPath(sbtDep("org.jetbrains.scala", "sbt-structure-extractor", Versions.sbtStructureVersion, "1.2")),
         "sbtStructurePath_1_3" -> relativeJarPath(sbtDep("org.jetbrains.scala", "sbt-structure-extractor", Versions.sbtStructureVersion, "1.3"))
       ),
-      buildInfoOptions += BuildInfoOption.ConstantValue
+      buildInfoOptions += BuildInfoOption.ConstantValue,
+      packageMethod := PackagingMethod.MergeIntoOther(scalaCommunity)
+
     )
     .withCompilerPluginIn(scalacPatches)
 
@@ -322,7 +326,9 @@ lazy val bsp =
       buildInfoPackage := "org.jetbrains.bsp.buildinfo",
       buildInfoKeys := Seq("bloopVersion" -> Versions.bloopVersion),
       buildInfoOptions += BuildInfoOption.ConstantValue,
-      ideExcludedDirectories := Seq(baseDirectory.value / "target")
+      ideExcludedDirectories := Seq(baseDirectory.value / "target"),
+      packageMethod := PackagingMethod.Standalone("lib/modules/oldBsp.jar"),
+      packageAssembleLibraries := true
     )
 
 
@@ -343,7 +349,8 @@ lazy val tastyReader = Project("tasty-reader", file("scala/tasty-reader"))
     libraryDependencies ++= Seq(
       Dependencies.junit % Test,
       Dependencies.junitInterface % Test,
-    )
+    ),
+    packageMethod := PackagingMethod.MergeIntoOther(scalaCommunity)
   )
 
 lazy val packageSearchClient: sbt.Project =
@@ -389,6 +396,7 @@ lazy val scalaImpl: sbt.Project =
         baseDirectory.value / "testdata" / "projectsForHighlightingTests" / ".coursier_cache",
         //NOTE: when updating, please also update `org.jetbrains.scalateamcity.common.Caching.highlightingPatterns`
         baseDirectory.value / "testdata" / "projectsForHighlightingTests" / "downloaded",
+
       ),
       //scalacOptions in Global += "-Xmacro-settings:analyze-caches",
       libraryDependencies ++= DependencyGroups.scalaCommunity,
@@ -413,7 +421,8 @@ lazy val scalaImpl: sbt.Project =
         Dependencies.scalaReflect                          -> Some("lib/scala-reflect.jar"),
         Dependencies.scalaLibrary                          -> None,
         Dependencies.scala3Library                         -> None,
-      )
+      ),
+      packageMethod := PackagingMethod.MergeIntoOther(scalaCommunity)
     )
     .withCompilerPluginIn(scalacPatches) // TODO Add to other modules
 
@@ -442,7 +451,8 @@ lazy val sbtImpl =
   newProject("sbt-impl", file("sbt/sbt-impl"))
     .dependsOn(sbtApi, scalaImpl % "test->test;compile->compile")
     .settings(
-      intellijPlugins += "org.jetbrains.idea.maven".toPlugin
+      intellijPlugins += "org.jetbrains.idea.maven".toPlugin,
+      packageMethod := PackagingMethod.MergeIntoOther(scalaCommunity)
     )
     .withCompilerPluginIn(scalacPatches)
 
@@ -755,7 +765,8 @@ lazy val intellijBspIntegration =
   newProject("intellij-bsp", file("scala/integration/intellij-bsp"))
     .dependsOn(scalaImpl, sbtImpl)
     .settings(
-      intellijPlugins += "org.jetbrains.bsp::daily".toPlugin.withFallbackDownloadUrl("https://students.mimuw.edu.pl/~ag438477/intellij-bsp-2024.1.0-EAP.zip")
+      intellijPlugins += "org.jetbrains.bsp::daily".toPlugin.withFallbackDownloadUrl("https://students.mimuw.edu.pl/~ag438477/intellij-bsp-2024.1.0-EAP.zip"),
+      packageMethod := PackagingMethod.Standalone("lib/modules/newBsp.jar")
     )
 
 lazy val mlCompletionIntegration =
